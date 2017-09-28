@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Listen>
+	<!--XNET链路-->
+	<XnetInfo>
+		<!--XNET通信标准 目前支持1.2.2 或1.3.1-->
+		<Version>1.2.2</Version>
+		<Address>192.168.40.1</Address>
+		<Port>16810</Port>
+		<AliveInterval>5000</AliveInterval>
+		<!-- 链接XNET的应该名称，不可重复-->
+		<AppName>Xprice-Adapter-CMDS</AppName>
+		<!--需要注册的TITLE以;分隔 最后一个或只有一个TITLE则不用加;-->
+		<Titles>XXXX.XXX;XFWDING.ReqHB</Titles>
+		<!--链路所有接口，包含签到、具体报文等-->
+		<Datas>
+			<!--具体某一接口配置 -->
+			<Data><!--签到报文示例-->
+				<!--TITLE,如果MsgType=2只用填target属性-->
+				<Title source="" target="XFWDING.ReqHB" ></Title>
+				<!--消息类型：1=接收报文，2=主动发送报文 3=发送报文 -->
+				<MsgType>2</MsgType>
+				<!--接收报文处理类型，MsgType=2时可配置空值：1--转发 2--需要回执--3无操作，记录日志 4--转发并且回执 -->
+				<HandLerType>5</HandLerType>
+				<!--XNET通讯Command注入的要素,不填则不设置-->
+				<XNetCommand>H</XNetCommand>
+				<!--数据过滤，满足该mvel表达式则不发送此数据   -->
+				<Filter>dataMap.productCode=='FWD'||dataMap.productCode=='IBOR'</Filter>
+				<!--具体报文，如果HandLerType=3以下字段只提供日志打印，不配置DataBody则不打印日志 -->
+				<propertys>
+					<!--具体报文属性说明： 
+						field：收发报文对应的field要保持一致
+						fieldType（字段类型）:1-普通字段 
+												2=循环报文标识字段,从下一个字段开始循环，MsgType=2取value为循环循环字段数MsgType==2取format为笔数循环次数默认为一
+												3=自定义字段（自定义字段不用作接口收发）
+												4=表示该循环体内数据为键值对形式,固定循环两个字段（针对彭博的价格报文）
+						valueType:代表字段转换类型,主动请求用2、5、9，转发报文所有的都可以用
+									0 :无操作
+									1 :时间转换，MsgType=1取value为源格式MsgType=2时value为日期值，取format目标格式目标 yyyy-MM-dd HH:mm:ss 
+									2 :取适配器系统时间并转换格式，取适配器接口当前系统日期，取format格式化 yyyy-MM-dd HH:mm:ss
+									5 :取适配器接口当前系统时间戳
+									6 :过滤掉某些值，原值取value，替换成的值format
+									7 :执行mvel表达式处理值，表达式取format,执行时会把所有字段的值加载到MAP传入执行的表达式，
+										本条数据MAP实例对象名称为dataMap,全量数据为allData，Map的key为配置属性field的字段名，
+										系统映射配置的MAP名称为keyMap
+										MVEL获取LIST、MAP、转换List等工具类的KEY为utils
+									8 :调用自定义函数处理值,调用的类及方法取format,格式如com.eryat.ServiceName.methodName，构造函数不能有参数,方法参数统一为MAP,
+										执行时会把所有字段的值加载到MAP传入要执行的方法，Map的key为配置属性target的字段名
+									9 :直接取直接取配置value属性的值
+									3 :数据过滤，mvel表达示取format的值，满足该mvel表达式则不发送此数据，循环报文体的过滤条件统一设置在fieldType="2"的字段中
+						value:配置报文需要直接发送value="值"中的值
+						format:报文转发到目标之前，该值按format格式化（支持date、time）,
+					-->
+					<property field="AppName" fieldType="1" valueType="2" value="" format="yyyy-MM-dd HH:mm:ss"/>
+					<property field="SendDate" fieldType="1" valueType="0" value="Feed" format=""/>
+					<property field="Count"  fieldType="2" valueType="3" value="" format="5"/>
+					<property field="Key1"  fieldType="1" valueType="0" value="Xprice-Adapter-CMDS" format=""/>
+					<property field="Key2"  fieldType="1" valueType="0" value="Xprice-Adapter-CMDS" format=""/>
+					<property field="Key3"  fieldType="1" valueType="0" value="Xprice-Adapter-CMDS" format=""/>
+					<property field="Key4"  fieldType="4" valueType="0" value="" format="mevel表达式"/>
+				</propertys>
+			</Data>		
+
+		</Datas>
+	</XnetInfo>
+	
+</Listen>

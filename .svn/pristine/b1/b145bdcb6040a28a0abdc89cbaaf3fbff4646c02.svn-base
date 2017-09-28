@@ -1,0 +1,38 @@
+#log4j.rootLogger=INFO, stdout
+log4j.rootLogger=DEBUG, stdout, ROLLING_FILE
+log4j.logger.Client = INFO,Client
+#log4j.addivity.rootLogger=true
+
+#for apache
+log4j.logger.org.apache=DEBUG
+
+#for springframework
+log4j.logger.org.springframework=INFO, stdout
+
+
+#Console output...
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=[%p][%t] %d{HH:mm:ss} - %m%n
+
+#exclude the Rate Data
+log4j.appender.Client=org.apache.log4j.RollingFileAppender
+log4j.appender.Client.file=./Log/rollingFile.log
+log4j.appender.Client.Append=true
+log4j.appender.Client.MaxFileSize=30000KB
+log4j.appender.Client.MaxBackupIndex=35
+log4j.appender.Client.encoding=UTF-8
+log4j.appender.Client.layout=org.apache.log4j.PatternLayout
+log4j.appender.Client.layout.ConversionPattern=<%d>[%5p] %c - %m%n
+
+#All Data
+log4j.appender.ROLLING_FILE=org.apache.log4j.RollingFileAppender
+log4j.appender.ROLLING_FILE.File=./Log/adapter.log
+log4j.appender.ROLLING_FILE.Append=true
+log4j.appender.ROLLING_FILE.MaxFileSize=30000KB
+log4j.appender.ROLLING_FILE.MaxBackupIndex=35
+log4j.appender.ROLLING_FILE.encoding=UTF-8
+log4j.appender.ROLLING_FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.ROLLING_FILE.layout.ConversionPattern=<%d>[%5p] %c - %m%n
+log4j.appender.ROLLING_FILE.BufferedIO=false
+log4j.appender.ROLLING_FILE.BufferSize=5242880

@@ -1,0 +1,144 @@
+package com.erayt.adapter.common;
+
+/**
+ * 系统参数、常量定义类
+ * @author hhq 20160713
+ *
+ */
+public class SystemParams {
+	/**
+	 * 1.2.2xnet verSion
+	 */
+	public static final String XNET_VERSION_2="1.2.2";
+	/**
+	 * 1.3.1xnet verSion
+	 */
+	public static final String XNET_VERSION_3="1.3.1";
+	/**
+	 * 消息类型：1=接收报文
+	 */
+	public static final int DATA_MSGTYPE_REC = 1;
+	/**
+	 * 消息类型：2=启动时主动发送报文
+	 */
+	public static final int DATA_MSGTYPE_INITSEND = 2;
+	
+	/**
+	 * 消息类型：3=发送报文
+	 */
+	public static final int DATA_MSGTYPE_SEND = 3;
+	
+	
+	/**
+	 * 
+	 * 0 :无操作
+		
+	 */
+	public static final int PROPERTIES_VALUETYPE_NONE = 0;
+	/**
+	 * 1 :时间转换，MsgType=1取value为源格式MsgType=2时value为日期值，取format目标格式目标 yyyymmdd 
+	 */
+	public static final int PROPERTIES_VALUETYPE_VALUEDATE = 1;
+	/**
+	 * 
+	 * 2 :取适配器系统时间并转换格式，取适配器接口当前系统日期，取format格式化yyyymmdd 
+	 */
+	public static final int PROPERTIES_VALUETYPE_SYSTEMDATE = 2;
+	/**
+	 * 
+	 * 5 :取适配器接口当前系统时间戳
+	 */
+	public static final int PROPERTIES_VALUETYPE_MILLIS = 5;
+	
+	/**
+	 * 
+	 * 6 :过滤掉某些值，原值取value，替换成的值format
+	 */
+	public static final int PROPERTIES_VALUETYPE_RELEPPSE = 6;
+	/**
+	 * 
+	 * 7 :执行mvel表达式处理值，表达式取format,执行时会把所有字段的值加载到MAP传入执行的表达式，MAP实例对象名称为dataMap，Map的key为配置属性target的字段名
+	 */
+	public static final int PROPERTIES_VALUETYPE_MVEL = 7;
+	/**
+	 * 
+	 * 8 :调用自定义函数处理值,调用的类及方法取format,格式如ServiceName.methodName(Map)，
+	 * 执行时会把所有字段的值加载到MAP传入要执行的方法，Map的key为配置属性target的字段名
+	 */
+	public static final int PROPERTIES_VALUETYPE_CUST = 8;
+	
+	/**
+	 * 
+	 * 9 :直接取直接取配置value属性的值
+	 */
+	public static final int PROPERTIES_VALUETYPE_VALUE = 9;
+	
+	/**
+	 * 
+	 * 数据过滤，mvel表达示取format的值，满足该mvel表达式则不发送此数据
+	 */
+	public static final int PROPERTIES_VALUETYPE_FILTER = 3;
+	
+	
+	/**
+	 * 
+	 * 字段类型:1-普通字段
+	 */
+	public static final int PROPERTIES_FIELDTYPE_NOMOR = 1;
+	
+	/**
+	 * 
+	 * 字段类型: 2=循环报文标识字段,从下一个字段开始循环，取format为循环截止字段名
+	 */
+	public static final int PROPERTIES_FIELDTYPE_EACH = 2;
+	/**
+	 * 
+	 * 字段类型:3=自定义字段（自定义字段不用作接口收发）
+	 */
+	public static final int PROPERTIES_FIELDTYPE_CUST = 3;
+	/**
+	 * 
+	 * 字段类型:4=表示该循环体内数据为键值对形式,固定循环两个字段（针对彭博的价格报文）
+	 */
+	public static final int PROPERTIES_FIELDTYPE_NOTCIRCY = 4;
+	
+	
+	/**
+	 * 执行mvel表达式时数据转入的beanName
+	 */
+	public static final String MVEL_RECDATA_BEANNAME = "dataMap";
+	/**
+	 * 执行mvel表达式时数据转入的全量数据beanName
+	 */
+	public static final String MVEL_RECDATA_ALLBEANNAME = "allData";
+	/**
+	 * 执行mvel表达式时数据转入的映射类的beanName
+	 */
+	public static final String MVEL_RECDATA_KEYMAP = "keyMap";
+	/**
+	 * 执行mvel表达式时提供的工具类
+	 */
+	public static final String MVEL_UTILS_NAME = "utils";
+	/**
+	 * 报文操作类型，MsgType=2时可配置空值：1--转发 2--回执--3无操作，记录日志 4--转发并且回执 
+	 */
+	public static final int DATA_HANDER_TRANSMIT = 1;
+	/**
+	 * 报文操作类型，MsgType=2时可配置空值：1--转发 2--回执--3无操作，记录日志 4--转发并且回执 
+	 */
+	public static final int DATA_HANDER_RETURN = 2;
+	/**
+	 * 报文操作类型，MsgType=2时可配置空值：1--转发 2--回执--3无操作，记录日志 4--转发并且回执
+	 */
+	public static final int DATA_HANDER_NONE = 3;
+	/**
+	 * 报文操作类型，MsgType=2时可配置空值：1--转发 2--回执--3无操作，记录日志 4--转发并且回执 
+	 */
+	public static final int DATA_HANDER_TRANSMITANDRETURN = 4;
+	
+	/**
+	 * 监控XNET间隔时间配置属性名
+	 */
+	public static final String XNETLIST_LISTEN_TIME = "xnetListListenTime";
+	
+}

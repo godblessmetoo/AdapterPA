@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Listen>
+	<XnetInfo>
+		<Version>1.2.2</Version>
+		<Address>192.168.40.86</Address>
+		<Port>13696</Port>
+		<AliveInterval>5000</AliveInterval>
+		<AppName>Xprice-Adapter-CMDS</AppName>
+		<Titles>Price.Collector.ReqTicker</Titles>
+		<Datas>
+			<Data>
+				<!--接收来自CMDS的即期牌价  -->
+				<Title source="Price.Collector.ReqTicker" target="XFWDING.FeedPrice.SPOT" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="3" value="13" format="dataMap.ProductCode=='FWD'||dataMap.ProductCode=='SWAP'||dataMap.ProductCode=='IBOR'"/>
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TrCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="QuoteUnit"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="BidVolume"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="AskVolume"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TradeMark" fieldType="1" valueType="0" value="" format=""/>
+					<property field="ValueDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MaturityDate"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!--接收来自CMDS的掉期牌价  -->
+			<Data>	
+				<Title source="Price.Collector.ReqTicker" target="XFWDING.FeedPrice.SWAP" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="3" value="13" format="dataMap.ProductCode=='FWD'||dataMap.ProductCode=='SPOT'||dataMap.ProductCode=='IBOR'"/>
+					
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TrCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="QuoteUnit"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="BidVolume"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="AskVolume"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TradeMark" fieldType="1" valueType="0" value="" format=""/>
+					<property field="ValueDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MaturityDate"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+		</Datas>
+	</XnetInfo>
+	
+	
+	
+	
+	<XnetInfo>
+		<Version>1.2.2</Version>
+		<Address>192.168.40.90</Address>
+		<Port>39980</Port>
+		<AliveInterval>5000</AliveInterval>
+		<AppName>Xprice-CONVERT-CMDS</AppName>
+		<Titles>XFWDING.FeedPrice.SPOT;XFWDING.FeedPrice.SWAP;XFWDING.ReqCltParam;XFWDING.UpCltParamMsg</Titles>
+		<Datas>
+		<!--Adapter发送给平安转发平台的即期牌价  -->
+			<Data>
+				<Title source="" target="XFWDING.FeedPrice.SPOT" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="14" format=""/>
+					
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FEEDRIC"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="QuoteUnit"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="UPDATEDATE"  fieldType="1" valueType="7" value="" format="allData.get('RateDate')"/>
+					<property field="UPDATETIME"  fieldType="1" valueType="7" value="" format="allData.get('RateTime')"/>
+					<property field="SAVE1" fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE2"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE3"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE4"  fieldType="1" valueType="9" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			
+			<!--Adapter发送给平安转发平台的掉期牌价  -->
+			<Data>
+				<Title source="" target="XFWDING.FeedPrice.SWAP" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="14" format=""/>
+					
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TrCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FEEDRIC"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="UPDATEDATE"  fieldType="1" valueType="7" value="" format="allData.get('RateDate')"/>
+					<property field="UPDATETIME"  fieldType="1" valueType="7" value="" format="allData.get('RateTime')"/>
+					<property field="SAVE1" fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE2"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE3"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE4"  fieldType="1" valueType="9" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			
+			<!-- Adapter主动送向平安价格转发平台请求订阅范围-->
+			<Data>
+				<Title source="" target="XFWDING.ReqCltParam" />
+				<MsgType>2</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="2" value="" format="yyyy-MM-dd"/>
+					<property field="SendTime"  fieldType="1" valueType="2" value="" format="HH:mm:ss"/>
+					<property field="RequestID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="2" format="2"/>
+					<property field="PriceType"  fieldType="1" valueType="9" value="BONDS" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="Bloomberg" format=""/>
+					<property field="PriceType"  fieldType="1" valueType="9" value="IR" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="9" value="Bloomberg" format=""/>
+				</propertys>
+			</Data>
+			<!-- 平安价格转发平台给Adapter的订阅范围回执（Adapter收到平安订阅回执）-->
+			<Data>
+				<Title source="XFWDING.ReqCltParam" target="XFeed.FeedName.ReqSubscribe" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="4" format=""/>
+					
+					<property field="PriceType"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FICCount"  fieldType="2" valueType="0" value="1" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					
+					<property field="FieldCount"  fieldType="3" valueType="7" value="" format="list= utils.toArrayList(keyMap.FieldName.SPOT.toString().split(';')"/>
+				</propertys>
+			</Data>
+			
+			<!--平安订阅范围变更后通知Adapter(表示Adapter收到更新通知) -->
+			<Data>
+				<Title source="XFWDING.UpCltParamMsg" target="XFWDING.ReqCltParam" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="2" format=""/>
+					
+					<property field="PriceType"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!--Adapter收到订阅范围更新通知后重新发送给平安请求订阅范围 -->
+			<Data>
+				<Title source="" target="XFWDING.ReqCltParam" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="2" format=""/>
+					<property field="PriceType"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+		</Datas>
+	</XnetInfo>
+	
+	
+	<XnetInfo>
+		<Version>1.2.2</Version>
+		<Address>192.168.40.91</Address>
+		<Port>39980</Port>
+		<AliveInterval>5000</AliveInterval>
+		<AppName>Xprice-BLOOMBERG-BONDS</AppName>
+		<Titles>XFeed.FeedName.ReqLogin;XFeed.FeedName.ReLoginMsg;XFeed.FeedName.ReqSubscribe;XFeed.AppName.ReqHB;XFeed.AppName.Quote</Titles>
+		<Datas>
+			<!--Adapter向彭博签到 -->
+			<Data>
+				<Title source="" target="XFeed.FeedName.ReqLogin" />
+				<MsgType>2</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>A</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="2" value="" format="yyyy-MM-dd"/>
+					<property field="SendTime"  fieldType="1" valueType="2" value="" format="HH:mm:ss"/>
+					<property field="RequestID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="AppName"  fieldType="1" valueType="9" value="Channel" format=""/>
+					<property field="UserName"  fieldType="1" valueType="9" value="user" format=""/>
+					<property field="PassWord"  fieldType="1" valueType="9" value="password" format=""/>
+				</propertys>
+			</Data>
+			
+			<!--Adapter 收到彭博的签到回执 -->
+			<Data>
+				<Title source="XFeed.FeedName.ReqLogin" target="" />
+				<MsgType>1</MsgType>
+				<HandLerType>3</HandLerType>
+				<XNetCommand>H</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="respCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="respDesc"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!--Adapter收到彭博的重新签到通知 -->
+			<Data>
+				<Title source="XFeed.FeedName.ReLoginMsg" target="XFeed.FeedName.ReqLogin" />
+				<MsgType>1</MsgType>
+				<HandLerType>3</HandLerType>
+				<XNetCommand>H</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			
+			<!--Adapter收到彭博的重新签到通知后，再次请求签到 -->
+			<Data>
+				<Title source="" target="XFeed.FeedName.ReqLogin" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>A</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="2" value="" format="yyyy-MM-dd"/>
+					<property field="SendTime"  fieldType="1" valueType="2" value="" format="HH:mm:ss"/>
+					<property field="RequestID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="AppName"  fieldType="1" valueType="9" value="Channel" format=""/>
+					<property field="UserName"  fieldType="1" valueType="9" value="user" format=""/>
+					<property field="PassWord"  fieldType="1" valueType="9" value="password" format=""/>
+				</propertys>
+			</Data>
+			
+			<!--Adapter收到彭博心跳请求 -->
+			<Data>
+				<Title source="XFeed.AppName.ReqHB" target="XFeed.AppName.ReqHB" />
+				<MsgType>1</MsgType>
+				<HandLerType>2</HandLerType>
+				<XNetCommand>H</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!--Adapter给彭博发送心跳回执 -->
+			<Data>
+				<Title source="XFeed.AppName.ReqHB" target="XFeed.AppName.ReqHB" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>H</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			
+			<!--Adapter给彭博发送订阅请求（从平安收到的订阅范围）-->
+			<Data>
+				<Title source="" target="XFeed.FeedName.ReqSubscribe" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="AppName"  fieldType="1" valueType="9" value="Adapter" format=""/>
+					<property field="Count"  fieldType="1" valueType="0" value="6" format=""/>
+					
+					<property field="PriceType"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Type"  fieldType="1" valueType="9" value="R" format=""/>
+					<property field="FICCount"  fieldType="2" valueType="0" value="1" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FieldCount"  fieldType="2" valueType="0" value="1" format=""/>
+					<property field="FieldName"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!--Adapter收到彭博的订阅回执 -->
+			<Data>
+				<Title source="XFeed.FeedName.ReqSubscribe" target="XFeed.FeedName.ReqSubscribe" />
+				<MsgType>1</MsgType>
+				<HandLerType>3</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="respCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="respDesc"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="6" format=""/>
+				</propertys>
+			</Data>
+			
+			
+			<!--Adapter主动向彭博发起利率的订阅请求 -->
+			<Data>
+				<Title source="" target="XFeed.FeedName.ReqSubscribe" />
+				<MsgType>2</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="2" value="" format="yyyy-MM-dd"/>
+					<property field="SendTime"  fieldType="1" valueType="2" value="" format="HH:mm:ss"/>
+					<property field="RequestID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="AppName"  fieldType="1" valueType="9" value="Adapter" format=""/>
+					<property field="Count"  fieldType="1" valueType="0" value="6" format="1"/>
+					
+					<property field="PriceType"  fieldType="1" valueType="9" value="IR" format=""/>
+					<property field="Type"  fieldType="1" valueType="9" value="R" format=""/>
+					<property field="FICCount"  fieldType="2" valueType="0" value="1" format="2"/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FieldCount"  fieldType="2" valueType="0" value="1" format="3"/>
+					<property field="FieldName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FieldName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FieldName"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+		</Datas>
+	</XnetInfo>	
+</Listen>

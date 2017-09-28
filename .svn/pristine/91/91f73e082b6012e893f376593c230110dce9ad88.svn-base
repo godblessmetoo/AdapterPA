@@ -1,0 +1,375 @@
+package com.erayt.adapter.main;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import com.erayt.adapter.common.GeneralCalendar;
+import com.erayt.adapter.common.MvelUtil;
+import com.erayt.adapter.common.SystemParams;
+import com.erayt.adapter.domain.DataConfig;
+import com.erayt.adapter.domain.DataPropertie;
+import com.erayt.solar2.utils.el.ELContext;
+import com.erayt.utils.XStream;
+import com.erayt.xnet4j.XNetData;
+import com.erayt.xnet4j.XNetSocket;
+
+/**
+ * 报文处理操作
+ * @author hhq 20160713
+ *
+ */
+public class ApapterHandler {
+
+	private static final Logger logger = Logger.getLogger(ApapterHandler.class.getSimpleName());
+	private static MvelUtil utils = new MvelUtil();
+	/**
+	 * 处理接收到的报文
+	 * @author hhq 20160713
+	 * @param xnetSocket
+	 * @param xnetData
+	 */
+	public static void dataRead(XNetSocket xnetSocket, XNetData xnetData){
+		try {
+			
+			String title = xnetData.getTitle();
+			XStream xStream=null;
+			logger.debug("rec data= "+title+" "+xnetData.getDataStr());
+			
+			for(DataConfig config : AdapterContext.responseList){
+				if((config.getTitleSource()).equals(title) && xnetSocket.getLogicName().equals(config.getXnetAppName())){
+					xStream = new XStream(xnetData.getDataStr());
+					Map<String,Object> recData = new HashMap<String, Object>();
+					List<DataPropertie> allPro = config.getPropertys();
+					for(int i =0;i<allPro.size();i++){
+						DataPropertie properties = allPro.get(i);
+						//遇到循环报文体
+						if(properties.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_EACH){
+							List<Map<String, Object>> temp = readEachData(allPro, properties, xStream,recData);
+							recData.put(properties.getField(), temp);
+							int skip =Integer.parseInt(properties.getValue());
+							//路过循环报文
+							i= i+skip;
+						}else if(properties.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_NOMOR){
+							if(properties.getValueType() == SystemParams.PROPERTIES_VALUETYPE_VALUE){
+								recData.put(properties.getField(), properties.getValue());
+							}else{
+								recData.put(properties.getField(), xStream.getString());
+							}
+						}else if(properties.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_CUST){
+							recData.put(properties.getField(), convertOnePropertie(recData, properties, recData));
+						}
+					}
+					
+					//filter
+					if(config.getFilter() != null && !config.getFilter().equals("")){
+						Map<Object, Object> beans = new HashMap<Object, Object>();
+						beans.put(SystemParams.MVEL_RECDATA_BEANNAME, recData);
+						Object exeRelust = executeMvel(beans, null, config.getFilter());
+						if(Boolean.parseBoolean(exeRelust.toString())){
+							continue;
+						}
+					}
+					//handler Data
+					
+					//send
+					if(config.getHandLerType()==SystemParams.DATA_HANDER_NONE){
+						//logger.info("rec huizhi "+ xnetData.getCommand());
+						logger.info("rec xnet data :" + xStream.toString());
+					}
+					if(config.getHandLerType()==SystemParams.DATA_HANDER_TRANSMIT ||
+							config.getHandLerType() == SystemParams.DATA_HANDER_TRANSMITANDRETURN){
+						
+						//config.setTitleTarget(config.getTitleSource());
+						XStream send = handRecData(config, recData);
+						//数据发送
+						AdapterContext.send(config, send);
+					}
+					
+					if(config.getHandLerType()==SystemParams.DATA_HANDER_RETURN ||
+							config.getHandLerType() == SystemParams.DATA_HANDER_TRANSMITANDRETURN){
+						DataConfig df  = new DataConfig();
+						df.setTitleTarget(config.getTitleSource());
+						XStream send = handRecData(config, recData);
+						
+						int returnCode = xnetData.getRetcode();
+						if (returnCode == 0){
+							xnetData.exchange();
+							xnetData.setRetcode(0);
+							xnetData.setTitle(config.getTitleSource());
+							
+							xnetData.setData(send.toString());
+							xnetSocket.sendData(xnetData);
+						}
+					}
+				}
+			}
+			logger.info("rec xnet data handle end");
+		} catch (Exception e) {
+			logger.info("rec xnet data handle error"+e.getMessage());
+			logger.info("rec xnet data handle error{}",e);
+		}
+	}
+	
+	
+	/**
+	 * 读取循环报文
+	 * @author hhq 20160713
+	 * @param allPro
+	 * @param properties
+	 * @param xStream
+	 * @return
+	 */
+	public static List<Map<String, Object>> readEachData(List<DataPropertie> allPro,DataPropertie properties,XStream xStream,Map<String, Object> allMap){
+		try {
+			int indexOf =1;
+			if(properties!=null){
+				indexOf = allPro.indexOf(properties)+1;
+			}
+			
+			List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+			//笔数
+			int count=xStream.getInt();
+			//每笔字段数
+			int eachFieldNum = Integer.parseInt(properties.getValue());
+			for (int i = 0; i < count; i++) {
+				Map<String, Object> oneMap = new HashMap<String, Object>();
+				for (int j = 0; j < eachFieldNum; j++) {
+					if(indexOf+j<allPro.size()){
+						DataPropertie  temp = allPro.get(indexOf+j);
+						if(temp.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_EACH){
+							//迭代加载循环报文
+							oneMap.put(temp.getField(), readEachData(allPro, temp, xStream,allMap));
+							indexOf=indexOf+Integer.parseInt(temp.getValue());
+						}else if(temp.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_NOMOR){
+							if(temp.getValueType() == SystemParams.PROPERTIES_VALUETYPE_VALUE){
+								oneMap.put(temp.getField(), temp.getValue().trim());
+							}else{
+								oneMap.put(temp.getField(), xStream.getString());
+							}
+						}else if(temp.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_CUST){
+							oneMap.put(temp.getField(), convertOnePropertie(oneMap, temp, allMap));
+						}else if(temp.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_NOTCIRCY){
+							int notCircy=xStream.getInt();
+							for(int sim =  0; sim < notCircy; sim++){
+								oneMap.put(xStream.getString(), xStream.getString());
+							}
+						}else if(temp.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_TOLIST){
+							String ficList= xStream.getString();
+							String[] fics=ficList.split(";");
+							List<Map<String, Object>> fic=new ArrayList<Map<String, Object>>();
+							for (int k = 0; k < fics.length; k++) {
+								Map<String, Object> hashMap=new HashMap<String, Object>();
+								hashMap.put(temp.getFormat(), fics[k]);
+								fic.add(hashMap);
+							}
+							oneMap.put(temp.getField().trim(), fic);
+						}
+					}
+				}
+				
+				//数据过滤
+				if(properties.getValueType()==SystemParams.PROPERTIES_VALUETYPE_FILTER){
+					Map<Object, Object> beans = new HashMap<Object, Object>();
+					beans.put(SystemParams.MVEL_RECDATA_BEANNAME, oneMap);
+					Object exeRelust = executeMvel(beans, null, properties.getFormat());
+					if(!Boolean.parseBoolean(exeRelust.toString())){
+						list.add(oneMap);
+					}
+				}else{
+					list.add(oneMap);
+				}
+				
+			}
+			return list;
+		} catch (Exception e) {
+			logger.error("readEachData error=" +e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * 转换接收到的数据变成待发送的数据
+	 * @author hhq 20160713
+	 * @param config
+	 * @param recData
+	 * @return
+	 */
+	public static XStream handRecData(DataConfig recConfig,Map<String,Object> recData){
+		try {
+			logger.info("convertRecData begin....");
+			List<DataPropertie> allPro = null;
+			for(DataConfig config : AdapterContext.requestList){
+				if(config.getMsgType()==SystemParams.DATA_MSGTYPE_SEND && recConfig.getTitleTarget().equals(config.getTitleTarget())){
+					allPro = config.getPropertys();
+				}
+			}
+			XStream xStream = new XStream();
+			for(int i =0;i<allPro.size();i++){
+				DataPropertie properties = allPro.get(i);
+				//遇到循环报文体
+				if(properties.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_EACH){
+					writeEachData(allPro, properties, xStream, (List<Map<String, Object>>)recData.get(properties.getField()), recData);
+					int skip =Integer.parseInt(properties.getValue());
+					//路过循环报文
+					i= i+skip;
+				}else if(properties.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_NOMOR){
+					xStream.append( convertOnePropertie(recData, properties, recData).toString());
+				}
+			}
+			logger.info("convertRecData end....");
+			return xStream;
+		} catch (Exception e) {
+			logger.error("convertRecData error...."+e.getMessage());
+			logger.error("convertRecData error....{}",e);
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * 根据发送报文规则处理接收到的报文值
+	 * @author hhq 20160713
+	 * @param dataBody
+	 * @param recData
+	 * @return
+	 */
+	public static Object convertOnePropertie(Map<String,Object> recData,DataPropertie propertie,Map<String,Object> allData){
+		try {
+			
+			switch (propertie.getValueType()) {
+			case SystemParams.PROPERTIES_VALUETYPE_NONE:
+				return recData.get(propertie.getField()).toString();
+			case SystemParams.PROPERTIES_VALUETYPE_VALUEDATE:
+				if(recData==null){
+					Date date = GeneralCalendar.getUtilDate(propertie.getValue(), propertie.getFormat());
+					String result = GeneralCalendar.getDateStr(date, propertie.getFormat());
+					return  result;
+				}else{
+					Date date = GeneralCalendar.getUtilDate(recData.get(propertie.getField()).toString(), propertie.getValue());
+					String result = GeneralCalendar.getDateStr(date, propertie.getFormat());
+					return  result;
+				}
+				
+			case SystemParams.PROPERTIES_VALUETYPE_SYSTEMDATE:
+				Date date = GeneralCalendar.getUtilDate(GeneralCalendar.getNumericDateTime()+"", "yyyyMMddHHmmss");
+				String result = GeneralCalendar.getDateStr(date, propertie.getFormat());
+				return  result;
+				
+			case SystemParams.PROPERTIES_VALUETYPE_MILLIS:
+				return  System.currentTimeMillis()+Math.random()+"";
+			case SystemParams.PROPERTIES_VALUETYPE_RELEPPSE:
+				return  recData.get(propertie.getField()).toString().replaceAll(propertie.getValue(), propertie.getFormat());
+			case SystemParams.PROPERTIES_VALUETYPE_MVEL:
+				
+				Map<Object, Object> beans = new HashMap<Object, Object>();
+				Map<String,Object> params = new HashMap<String, Object>();
+				beans.put(SystemParams.MVEL_RECDATA_BEANNAME, recData);
+				beans.put(SystemParams.MVEL_RECDATA_ALLBEANNAME, allData);
+				beans.put(SystemParams.MVEL_RECDATA_KEYMAP, AdapterContext.keyMap);
+				MvelUtil utils = new MvelUtil();
+				params.put(SystemParams.MVEL_UTILS_NAME, utils);
+				Object exeRelust = executeMvel(beans, params, propertie.getFormat());
+				return exeRelust;
+			case SystemParams.PROPERTIES_VALUETYPE_CUST:
+				//调用 自定义方法
+				String classPath= propertie.getFormat();
+				String calssName= classPath.substring(0,classPath.lastIndexOf("."));
+				String methodName=classPath.substring(classPath.lastIndexOf(".")+1);
+									
+				Class<? extends Object> class1 =Class.forName(calssName);
+				Method method = class1.getMethod(methodName,Map.class);
+			    class1.newInstance();
+			    method.invoke(class1.newInstance(), allData);
+				
+			    return recData.get(propertie.getField()).toString();
+			    
+			case SystemParams.PROPERTIES_VALUETYPE_VALUE:
+				return propertie.getValue();
+			default:
+				return recData.get(propertie.getField()).toString();
+			}
+			
+			
+		} catch (Exception e) {
+			logger.info("build send data error={}!",e);
+		}
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * 向XNET写入循环体报文
+	 * @author hhq 20160713
+	 * @param allPro
+	 * @param properties
+	 * @param xStream
+	 */
+	public static void writeEachData(List<DataPropertie> allPro,DataPropertie properties,XStream xStream,List<Map<String, Object>> recListMap,Map<String, Object> allData){
+		try {
+			int indexOf =1;
+			if(properties!=null){
+				indexOf = allPro.indexOf(properties)+1;
+			}
+			
+			//笔数
+			int count = recListMap.size();
+			xStream.append(count+"");	
+			//每笔字段数
+			int eachFieldNum = Integer.parseInt(properties.getValue());
+			for (int i = 0; i < count; i++) {
+				for (int j = 0; j < eachFieldNum; j++) {
+					if(indexOf+j<allPro.size()){
+						DataPropertie  temp = allPro.get(indexOf+j);
+						Map<String, Object> one = recListMap.get(i);
+						if(temp.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_EACH){
+							//迭代加载循环报文
+							writeEachData(allPro, temp, xStream, (List<Map<String, Object>>)one.get(temp.getField()),allData);
+							indexOf=indexOf+Integer.parseInt(temp.getValue());
+						}else if(temp.getFieldType()==SystemParams.PROPERTIES_FIELDTYPE_NOMOR){
+							xStream.append(ApapterHandler.convertOnePropertie(one, temp,allData).toString());
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("writeEachData error="+e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	/**调用MVEL表达式
+	 * @author hhq 20160713
+	 * @param beans
+	 * @param params
+	 * @param expre
+	 * @return
+	 */
+	public static Object executeMvel(Map<Object,Object> beans,Map<String,Object> params,String expre){
+		try {
+			
+			if(params == null){
+				params = new HashMap<String, Object>();
+			};
+			beans.put(SystemParams.MVEL_RECDATA_KEYMAP, AdapterContext.keyMap);
+			params.put(SystemParams.MVEL_UTILS_NAME, utils);
+			ELContext lc = new ELContext(beans, params);
+			Object exeRelust = utils.executeExpreAndReturnObj(expre, lc);
+			return exeRelust;
+		} catch (Exception e) {
+			logger.error("executeMvel error="+e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+	}
+}

@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Listen>
+	<!-- <XnetInfo>
+		<Version>1.2.2</Version>
+		<Address>10.14.15.174</Address>
+		<Port>13103</Port>
+		<AliveInterval>5000</AliveInterval>
+		<AppName>Xprice-SDSAdapter-CMDS</AppName>
+		<Titles>Price.Collector.ReqTicker</Titles>
+		<Datas>
+			<Data>
+				<Title source="Price.Collector.ReqTicker" target="XFWDING.FeedPrice.SPOT" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter>dataMap.Count.size()==0</Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="3" value="13" format="dataMap.ProductCode=='FWD'||dataMap.ProductCode=='SWAP'||dataMap.ProductCode=='IBOR'||dataMap.FeedCode=='RMDS'"/>
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TrCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="QuoteUnit"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="BidVolume"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="AskVolume"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TradeMark" fieldType="1" valueType="0" value="" format=""/>
+					<property field="ValueDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MaturityDate"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<Data>
+				<Title source="Price.Collector.ReqTicker" target="XFWDING.FeedPrice.SWAP" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter>dataMap.Count.size()==0</Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="3" value="13" format="dataMap.ProductCode=='FWD'||dataMap.ProductCode=='SPOT'||dataMap.ProductCode=='IBOR'||dataMap.FeedCode=='RMDS'"/>
+					
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TrCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="QuoteUnit"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="BidVolume"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="AskVolume"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TradeMark" fieldType="1" valueType="0" value="" format=""/>
+					<property field="ValueDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MaturityDate"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+		</Datas>
+	</XnetInfo> -->
+	
+	<XnetInfo>
+		<Version>1.2.2</Version>
+		<Address>10.14.15.174</Address>
+		<Port>13104</Port>
+		<AliveInterval>5000</AliveInterval>
+		<AppName>Xprice-SDSAdapter-Convert</AppName>
+		<Titles>XFWDING.ReqCltParam;XFWDING.UpCltParamMsg;XFWDING.FeedPrice.BONDS;XFWDING.FeedPrice.IR</Titles>
+		<Datas>
+			<!-- send CMDS datas -->
+			<!-- <Data>
+				<Title source="" target="XFWDING.FeedPrice.SPOT" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="14" format=""/>
+					
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FEEDRIC"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="QuoteUnit"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="UPDATEDATE"  fieldType="1" valueType="7" value="" format="allData.get('RateDate')"/>
+					<property field="UPDATETIME"  fieldType="1" valueType="7" value="" format="allData.get('RateTime')"/>
+					<property field="SAVE1" fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE2"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE3"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE4"  fieldType="1" valueType="9" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<Data>
+				<Title source="" target="XFWDING.FeedPrice.SWAP" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="14" format=""/>
+					
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TrCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FEEDRIC"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="UPDATEDATE"  fieldType="1" valueType="7" value="" format="allData.get('RateDate')"/>
+					<property field="UPDATETIME"  fieldType="1" valueType="7" value="" format="allData.get('RateTime')"/>
+					<property field="SAVE1" fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE2"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE3"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE4"  fieldType="1" valueType="9" value="" format=""/>
+				</propertys>
+			</Data> -->
+			
+			<!-- 向转发平台请求订阅参数 -->
+			<!-- <Data>
+				<Title source="" target="XFWDING.ReqCltParam" />
+				<MsgType>2</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>A</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="2" value="" format="yyyyMMdd"/>
+					<property field="SendTime"  fieldType="1" valueType="2" value="" format="HHmmss"/>
+					<property field="RequestID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="2" format="1"/>
+					<property field="PriceType"  fieldType="1" valueType="9" value="BONDS" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="9" value="Bloomberg" format=""/>
+				</propertys>
+			</Data> -->
+			
+			<!-- 接收平安返回的订阅参数 -->
+			<!-- <Data>
+				<Title source="XFWDING.ReqCltParam" target="XFeed.Bloomberg.ReqSubscribe" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="5" format=""/>
+					
+					<property field="PriceType"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FICCount"  fieldType="2" valueType="0" value="1" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					
+					<property field="FieldCount"  fieldType="3" valueType="7" value="" format="list= utils.toArrayList(keyMap.FieldName.BONDS.toString().split(';'),'FieldName')"/>
+				</propertys>
+			</Data> -->
+			
+			<!-- 向转发平台发送债券报文 -->
+			<!-- <Data>
+				<Title source="" target="XFWDING.FeedPrice.BONDS" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="17" format=""/>
+					
+					<property field="SetName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="9" value="Bloomberg" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="BONDSCODE"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="BROKERCODE"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="CYNAME"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="BID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="ASK"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="LAST_PRICE"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MATURITYDATE"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="UPDATEDATE"  fieldType="1" valueType="2" value="" format="yyyyMMdd"/>
+					<property field="UPDATETIME"  fieldType="1" valueType="2" value="" format="HHmmss"/>
+					<property field="QUOTETYPE"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="TIME" fieldType="1" valueType="0" value="" format=""/>
+					<property field="SAVE2"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE3"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE4"  fieldType="1" valueType="9" value="" format=""/>
+				</propertys>
+			</Data> -->
+			
+			<!-- 向转发平台发送利率报文 -->
+			<Data>
+				<Title source="" target="XFWDING.FeedPrice.IR" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="18" format=""/>
+					
+					<property field="SetName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="9" value="Bloomberg" format=""/>
+					<property field="CURVETYPE"  fieldType="1" valueType="9" value="IRS" format=""/>
+					<property field="CURVENAME"  fieldType="1" valueType="9" value="FR007" format=""/>
+					<property field="CYNAME"  fieldType="1" valueType="9" value="CNY" format=""/>
+					<property field="TERMNAME"  fieldType="1" valueType="9" value="1Y" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="BID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="ASK"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="LAST_PRICE"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MID2"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="QUOTEFORMAT"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="UPDATEDATE"  fieldType="1" valueType="2" value="" format="yyyyMMdd"/>
+					<property field="UPDATETIME"  fieldType="1" valueType="2" value="" format="HHmmss"/>
+					<property field="TIME" fieldType="1" valueType="0" value="" format=""/>
+					<property field="SAVE2"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE3"  fieldType="1" valueType="9" value="" format=""/>
+					<property field="SAVE4"  fieldType="1" valueType="9" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!-- 收到订阅更新通知 -->
+			<Data>
+				<Title source="XFWDING.UpCltParamMsg" target="XFWDING.ReqCltParam" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="2" format=""/>
+					
+					<property field="PriceType"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!-- 收到更新通知后，向平安请求订阅范围 -->
+			<Data>
+				<Title source="" target="XFWDING.ReqCltParam" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="2" format=""/>
+					<property field="PriceType"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			
+		</Datas>
+	</XnetInfo>
+	
+	<XnetInfo>
+		<Version>1.3.1</Version>
+		<Address>10.14.15.175</Address>
+		<Port>13104</Port>
+		<AliveInterval>5000</AliveInterval>
+		<AppName>Xprice-SDSAdapter-Bloomberg</AppName>
+		<Titles>XFeed.Bloomberg.ReqLogin;XFeed.SDSAdapter.ReqHB;XFeed.Bloomberg.ReqSubscribe;XFeed.SDSAdapter.Quote;XFeed.Bloomberg.ReLoginMsg</Titles>
+		<Datas>
+			
+			<!-- 主动向Bloomberg发送签到报文 -->
+			<Data>
+				<Title source="" target="XFeed.Bloomberg.ReqLogin" />
+				<MsgType>2</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>P</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="2" value="" format="yyyyMMdd"/>
+					<property field="SendTime"  fieldType="1" valueType="2" value="" format="HHmmss"/>
+					<property field="RequestID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="AppName"  fieldType="1" valueType="9" value="SDSAdapter" format=""/>
+					<property field="UserName"  fieldType="1" valueType="9" value="123456" format=""/>
+					<property field="PassWord"  fieldType="1" valueType="9" value="123456" format=""/>
+				</propertys>
+			</Data>
+			
+			<!-- 接收Bloomberg返回的 签到报文 -->
+			<Data>
+				<Title source="XFeed.Bloomberg.ReqLogin" target="" />
+				<MsgType>1</MsgType>
+				<HandLerType>3</HandLerType>
+				<XNetCommand>Q</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="respCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="respDesc"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!-- 接收Bloomberg的心跳包 -->
+			<Data>
+				<Title source="XFeed.SDSAdapter.ReqHB" target="XFeed.SDSAdapter.ReqHB" />
+				<MsgType>1</MsgType>
+				<HandLerType>2</HandLerType>
+				<XNetCommand>P</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!-- 返回给Bloomberg心跳报文 -->
+			<Data>
+				<Title source="XFeed.SDSAdapter.ReqHB" target="XFeed.SDSAdapter.ReqHB" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>Q</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data> 
+			
+			<!-- 向 彭博发送债券订阅报文 -->
+			<!-- <Data>
+				<Title source="" target="XFeed.Bloomberg.ReqSubscribe" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>P</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="AppName"  fieldType="1" valueType="9" value="SDSAdapter" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="6" format=""/>
+					
+					<property field="PriceType"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Type"  fieldType="1" valueType="9" value="A" format=""/>
+					<property field="FICCount"  fieldType="2" valueType="0" value="1" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FieldCount"  fieldType="2" valueType="0" value="1" format=""/>
+					<property field="FieldName"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data> -->
+			
+			<!-- 接收Bloomberg的订阅回执 -->
+			<Data>
+				<Title source="XFeed.Bloomberg.ReqSubscribe" target="" />
+				<MsgType>1</MsgType>
+				<HandLerType>3</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="respCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="respDesc"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RequestID"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+			<!-- 接收Bloomberg返回的债券牌价 -->
+			<!-- <Data>
+				<Title source="XFeed.SDSAdapter.Quote" target="XFWDING.FeedPrice.BONDS" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter>dataMap.Count.size()==0</Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="3" value="3" format="dataMap.SetName!='BONDS'"/>
+					<property field="SetName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SimCount"  fieldType="4" valueType="0" value="" format=""/>
+				</propertys>
+			</Data> -->
+			
+			
+			
+			<!--主动向彭博发送利率的订阅报文 -->
+			<Data>
+				<Title source="" target="XFeed.Bloomberg.ReqSubscribe" />
+				<MsgType>2</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>P</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="2" value="" format="yyyyMMdd"/>
+					<property field="SendTime"  fieldType="1" valueType="2" value="" format="HHmmss"/>
+					<property field="RequestID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="AppName"  fieldType="1" valueType="9" value="SDSAdapter" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="10" format="1"/>
+					
+					<property field="PriceType"  fieldType="1" valueType="9" value="IR" format=""/>
+					<property field="Type"  fieldType="1" valueType="9" value="A" format=""/>
+					<property field="FICCount"  fieldType="2" valueType="0" value="2" format="2"/>
+					<property field="FICName1"  fieldType="1" valueType="9" value="CCSWO1 CMPN Curncy" format=""/>
+					<property field="FICName2"  fieldType="1" valueType="9" value="CCSWO2 CMPN Curncy" format=""/>
+					<property field="FieldCount"  fieldType="2" valueType="0" value="4" format="4"/>
+					<property field="FieldName1"  fieldType="1" valueType="9" value="BID" format=""/>
+					<property field="FieldName2"  fieldType="1" valueType="9" value="ASK" format=""/>
+					<property field="FieldName3"  fieldType="1" valueType="9" value="TIME" format=""/>
+					<property field="FieldName4"  fieldType="1" valueType="9" value="LAST_PRICE" format=""/>
+				</propertys>
+			</Data>
+			
+			<!-- 接收Bloomberg返回的利率牌价 -->
+			<Data>
+				<Title source="XFeed.SDSAdapter.Quote" target="XFWDING.FeedPrice.IR" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>A</XNetCommand>
+				<Filter>dataMap.Count.size()==0</Filter>
+				<propertys>
+					<property field="SendDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SendTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="3" value="3" format="dataMap.SetName!='IR'"/>
+					<property field="SetName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FICName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SimCount"  fieldType="4" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+		</Datas>
+	</XnetInfo>
+	
+</Listen>

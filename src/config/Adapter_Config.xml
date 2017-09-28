@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Listen>
+	 <XnetInfo>
+		<Version>1.2.2</Version>
+		<Address>127.0.0.1</Address>
+		<Port>13698</Port>
+		<AliveInterval>5000</AliveInterval>
+		<AppName>Xprice-POPOAdapter4-CMDS</AppName>
+		<Titles>CMDS.SPOT.Ticker</Titles>
+		<Datas>
+			<Data>
+				<Title source="Trade.CSTP.SpotDeal" target="fdstp.CSTP.online" />
+				<MsgType>1</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="11" format=""/>
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="TrCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SAVE1" fieldType="1" valueType="0" value="" format=""/>
+					<property field="SAVE2"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SAVE3"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SAVE4"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+		</Datas>
+	</XnetInfo>
+	
+	<XnetInfo>
+		<Version>1.2.2</Version>
+		<Address>127.0.0.1</Address>
+		<Port>13698</Port>
+		<AliveInterval>5000</AliveInterval>
+		<AppName>XpriceRateFw-POPOAdapter4-ConvertA</AppName>
+		<Titles></Titles>
+		<Datas>
+			<!-- send CMDS datas -->
+			<Data>
+				<Title source="CMDS.SPOT.Ticker" target="XFWDING.FeedPrice.SPOT" />
+				<MsgType>3</MsgType>
+				<HandLerType>1</HandLerType>
+				<XNetCommand>C</XNetCommand>
+				<Filter></Filter>
+				<propertys>
+					<property field="RateDate"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateTime"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="MsgID"  fieldType="1" valueType="5" value="" format=""/>
+					<property field="Count"  fieldType="2" valueType="0" value="14" format=""/>
+					
+					<property field="ProductCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FeedCode"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="RateName"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="FEEDRIC"  fieldType="1" valueType="9" value="" format=""/>
+					<!-- <property field="QuoteUnit"  fieldType="1" valueType="0" value="" format=""/> -->
+					<property field="QuoteUnit"  fieldType="1" valueType="7" value="" format="list= utils.getQuoteUnit(keyMap.get('QuoteUnits').get(dataMap.get('ProductCode')+dataMap.get('RateName')+dataMap.get('TrCode')))"/>
+					<property field="Bid"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Ask"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="Mid"  fieldType="1" valueType="0" value="" format="NOTNULL"/>
+					<property field="UPDATEDATE"  fieldType="1" valueType="7" value="" format="allData.get('RateDate')"/>
+					<property field="UPDATETIME"  fieldType="1" valueType="7" value="" format="allData.get('RateTime')"/>
+					<property field="SAVE1" fieldType="1" valueType="0" value="" format=""/>
+					<property field="SAVE2"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SAVE3"  fieldType="1" valueType="0" value="" format=""/>
+					<property field="SAVE4"  fieldType="1" valueType="0" value="" format=""/>
+				</propertys>
+			</Data>
+			
+		</Datas>
+	</XnetInfo>
+	
+</Listen>

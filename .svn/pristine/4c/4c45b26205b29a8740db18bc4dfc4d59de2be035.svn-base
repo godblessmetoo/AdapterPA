@@ -1,0 +1,163 @@
+package com.erayt.adapter.main;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import com.erayt.adapter.common.GeneralCalendar;
+import com.erayt.adapter.domain.DataConfig;
+import com.erayt.adapter.xnet122.XnetService;
+import com.erayt.rate.domain.MarketSpotRate;
+import com.erayt.rate.domain.MarketSpotRateList;
+import com.erayt.rate.domain.MarketSwapRate;
+import com.erayt.rate.domain.MarketSwapRateList;
+import com.erayt.utils.XStream;
+import com.erayt.xnet4j.XNetCommand;
+import com.erayt.xnet4j.XNetData;
+
+public class AdapterRepository {
+	
+	private static final Logger logger = Logger.getLogger(AdapterRepository.class.getSimpleName());
+	/*
+	 * RMDS掉期价格存缓存
+	 */
+	public static void cmdsSpotRateRepository(XStream data){
+		XStream spotXStream = new XStream();
+		logger.debug("即期价格数据即将存入缓存中："+spotXStream.toString());
+		spotXStream.append(data.toString());
+		spotXStream.skip(3);
+		int count = spotXStream.getInt();
+		for (int i = 0; i < count; i++) {
+			MarketSpotRate marketSpotRate = new MarketSpotRate();
+			marketSpotRate.setPriceType(spotXStream.getString());
+			marketSpotRate.setFeedCode(spotXStream.getString());
+			marketSpotRate.setCypairName(spotXStream.getString());
+			marketSpotRate.setFeedRic(spotXStream.getString());
+			marketSpotRate.setQuoteUnit(spotXStream.getInt());
+			marketSpotRate.setBid(BigDecimal.valueOf(spotXStream.getDouble()));
+			marketSpotRate.setAsk(BigDecimal.valueOf(spotXStream.getDouble()));
+			marketSpotRate.setMid(BigDecimal.valueOf(spotXStream.getDouble()));
+			marketSpotRate.setUpdateDate(spotXStream.getInt());
+			marketSpotRate.setUpdateTime(spotXStream.getInt());
+			marketSpotRate.setSave1(spotXStream.getString());
+			marketSpotRate.setSave2(spotXStream.getString());
+			marketSpotRate.setSave3(spotXStream.getString());
+			marketSpotRate.setSave4(spotXStream.getString());
+			MarketSpotRateList.SPOTRATE_LISTS.update(marketSpotRate);
+		}
+	}
+	
+	/*
+	 * RMDS掉期价格存缓存
+	 */
+	public static void cmdsSwapRateRepository(XStream data){
+		XStream swapXStream = new XStream();
+		logger.debug("掉期价格数据即将存入缓存中："+swapXStream.toString());
+		swapXStream.append(data.toString());
+		swapXStream.skip(3);
+		int count = swapXStream.getInt();
+		for (int i = 0; i < count; i++) {
+			MarketSwapRate marketSwapRate = new MarketSwapRate();
+			marketSwapRate.setPriceType(swapXStream.getString());
+			marketSwapRate.setFeedCode(swapXStream.getString());
+			marketSwapRate.setCypairName(swapXStream.getString());
+			marketSwapRate.setTermName(swapXStream.getString());
+			marketSwapRate.setFeedRic(swapXStream.getString());
+			marketSwapRate.setBid(BigDecimal.valueOf(swapXStream.getDouble()));
+			marketSwapRate.setAsk(BigDecimal.valueOf(swapXStream.getDouble()));
+			marketSwapRate.setMid(BigDecimal.valueOf(swapXStream.getDouble()));
+			marketSwapRate.setUpdateDate(swapXStream.getInt());
+			marketSwapRate.setUpdateTime(swapXStream.getInt());
+			marketSwapRate.setSave1(swapXStream.getString());
+			marketSwapRate.setSave2(swapXStream.getString());
+			marketSwapRate.setSave3(swapXStream.getString());
+			marketSwapRate.setSave4(swapXStream.getString());
+			MarketSwapRateList.SWAPRATE_LISTS.update(marketSwapRate);
+		}
+	}
+	/*
+	 * 发送即期掉期缓存中全量牌价
+	 */
+	public static void sendRepositoryPrice(){
+		//发送即期缓存中全量牌价
+		sendSpotRepositoryPrice();
+		//发送掉期缓存中全量牌价
+		sendSwapRepositoryPrice();
+	}
+	/*
+	 * 发送即期缓存中全量牌价
+	 */
+	public static void sendSpotRepositoryPrice(){
+		// 获取内存中即期牌价
+		List<MarketSpotRate> data = MarketSpotRateList.SPOTRATE_LISTS.getData();
+		XNetData xNetData = new XNetData();
+		xNetData.setCommand(XNetCommand.MUTITITLE);
+		xNetData.setTitle("XFWDING.FeedPrice.SPOT");
+		XStream stream = new XStream();
+		GeneralCalendar gc = new GeneralCalendar();
+		stream.append(gc.getDate());
+		stream.append(gc.getTime());
+		stream.append(gc.getDateTime());
+		stream.append(data.size());
+		for (MarketSpotRate marketSpotRate : data) {
+			stream.append(marketSpotRate.getPriceType());
+			stream.append(marketSpotRate.getFeedCode());
+			stream.append(marketSpotRate.getCypairName());
+			stream.append(marketSpotRate.getFeedRic());
+			stream.append(marketSpotRate.getQuoteUnit());
+			stream.append(marketSpotRate.getBid().toString());
+			stream.append(marketSpotRate.getAsk().toString());
+			stream.append(marketSpotRate.getMid().toString());
+			stream.append(marketSpotRate.getUpdateDate());
+			stream.append(marketSpotRate.getUpdateTime());
+			stream.append(marketSpotRate.getSave1());
+			stream.append(marketSpotRate.getSave2());
+			stream.append(marketSpotRate.getSave3());
+			stream.append(marketSpotRate.getSave4());
+		}
+		for (DataConfig temp : AdapterContext.requestList) {
+			xNetData.setData(stream.toString());
+			XnetService xnet = AdapterContext.listenMap.get(temp.getXnetAppName());
+			xnet.getXnetSocket().sendData(xNetData);
+		}
+	}
+	
+	/*
+	 * 发送掉期缓存中全量牌价
+	 */
+	public static void sendSwapRepositoryPrice(){
+		// 获取内存中掉期牌价
+		List<MarketSwapRate> data = MarketSwapRateList.SWAPRATE_LISTS.getData();
+		XNetData xNetData = new XNetData();
+		xNetData.setCommand(XNetCommand.MUTITITLE);
+		xNetData.setTitle("XFWDING.FeedPrice.SWAP");
+		XStream stream = new XStream();
+		GeneralCalendar gc = new GeneralCalendar();
+		stream.append(gc.getDate());
+		stream.append(gc.getTime());
+		stream.append(gc.getDateTime());
+		stream.append(data.size());
+		for (MarketSwapRate marketSwapRate : data) {
+			stream.append(marketSwapRate.getPriceType());		
+			stream.append(marketSwapRate.getFeedCode());
+			stream.append(marketSwapRate.getCypairName());
+			stream.append(marketSwapRate.getTermName());
+			stream.append(marketSwapRate.getFeedRic());
+			stream.append(marketSwapRate.getBid().toString());
+			stream.append(marketSwapRate.getAsk().toString());
+			stream.append(marketSwapRate.getMid().toString());
+			stream.append(marketSwapRate.getUpdateDate());
+			stream.append(marketSwapRate.getUpdateTime());
+			stream.append(marketSwapRate.getSave1());
+			stream.append(marketSwapRate.getSave2());
+			stream.append(marketSwapRate.getSave3());
+			stream.append(marketSwapRate.getSave4());
+		}
+		for (DataConfig temp : AdapterContext.requestList) {
+			xNetData.setData(stream.toString());
+			XnetService xnet = AdapterContext.listenMap.get(temp.getXnetAppName());
+			xnet.getXnetSocket().sendData(xNetData);
+		}
+	}
+}

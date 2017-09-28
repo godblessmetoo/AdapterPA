@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Maps>
+	<FieldName>
+		<BONDS>BID;ASK;LAST_PRICE;TIME</BONDS>
+		<CCSWO1>CYNAME:CNY;TERMNAME:1M</CCSWO1>
+	</FieldName>
+	<CCSWO2>
+		<CYNAME>CNY</CYNAME>
+		<TERMNAME>1M</TERMNAME>
+	</CCSWO2>
+</Maps>
